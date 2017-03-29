@@ -1,0 +1,280 @@
+<!--
+    切换控制流水线
+    执行router的全局函数:beforeEach
+
+    执行组件Home的钩子函数:canActivate
+
+    执行组件Message的钩子函数:canActivate
+
+    执行router的全局函数:afterEach
+
+    执行组件Home的钩子函数:activate
+
+    执行组件Home的钩子函数:data
+
+    执行组件Message的钩子函数:activate
+
+    执行组件Message的钩子函数:data
+
+    ---------------------------------
+    先确定（全局）before
+            然后呢确定是不是可以canaction
+    然后（全局）after
+            之后action 加上数据处理
+---------------------------------切换流程------------------------------------
+执行router的全局函数:beforeEach
+执行组件Message的钩子函数:canDeactivate
+执行组件Home的钩子函数:canDeactivate
+执行组件About的钩子函数:canActivate
+执行组件Message的钩子函数:deactivate
+执行组件Home的钩子函数:deactivate
+执行router的全局函数:afterEach
+执行组件About的钩子函数:activate
+执行组件About的钩子函数:data
+    全局（before）
+    candeaction   canaction  deaction (我要去切换了（before） 我可以干掉我现在的路 （candeaction）
+     但是我必须知道我可以到哪里去 canaction  最后呢 我要干掉我原来的路（deaction） 然后走向我计划去的路（action） 最后带上干粮！！)
+
+1. 可重用阶段
+检查当前的视图结构中是否存在可以重用的组件。这是通过对比两个新的组件树，找出共用的组件，然后检查它们的可重用性（通过 canReuse 选项）。
+默认情况下， 所有组件都是可重用的，除非是定制过。
+2. 验证阶段
+检查当前的组件是否能够停用以及新组件是否可以被激活。这是通过调用路由配置阶段的canDeactivate 和canActivate 钩子函数来判断的。
+image
+3.激活阶段
+一旦所有的验证钩子函数都被调用而且没有终止切换，切换就可以认定是合法的。
+路由器则开始禁用当前组件并启用新组件。
+此阶段对应钩子函数的调用顺序和验证阶段相同，其目的是在组件切换真正执行之前提供一个进行清理和准备的机会。
+界面的更新会等到所有受影响组件的 deactivate 和 activate 钩子函数执行之后才进行。
+data 这个钩子函数会在 activate 之后被调用，或者当前组件组件可以重用时也会被调用。
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-router 钩子函数</title>
+    <script src="../common/vue-router.js"></script>
+    <script src="../common/vue.min.js"></script>
+    <style>
+        .active{
+            background: red;
+        }
+        .active2{
+             background: blue;
+         }
+
+        .active3{
+            background: yellow;
+        }
+        img{
+            width:300px;
+            float: left;
+        }
+    </style>
+</head>
+<body id="app">
+<ul>
+         <a v-link="{path:'/home',activeClass: 'active'}">home</a>
+         <a v-link="{path:'/about',activeClass: 'active'}">About</a>
+        <img src="../source/001.png">
+        <img src="../source/002.png">
+    <hr>
+</ul>
+<router-view></router-view>
+
+
+
+<div class="well">
+    {{{ msg }}}
+</div>
+
+<template id="home">
+    this is a home
+    <ul>
+        <li :class="currentPath == '/home/news' ? 'active2': ''">
+            <a v-link="{ path: '/home/news'}">news</a>
+        </li>
+        <li :class="currentPath == '/home/message' ? 'active2': ''">
+            <a v-link="{ path: '/home/message'}">message</a>
+        </li>
+<!--
+        <li v-link="{path:'/home/news' ,activeClass:'active2'}"></li>
+        <li v-link="{path:'/home/message',activeClass: 'active2'}"></li>
+-->
+    </ul>
+    <router-view></router-view>
+</template>
+
+<template id="news">
+    <ul>
+        <li v-link="{name:'detail',params:{id:'01'},activeClass: 'active3'}">News 01</li>
+        <li v-link="{path:'/home/news/detail02',activeClass: 'active3'}">News 02</li>
+        <li v-link="{path:'/home/news/detail03',activeClass: 'active3'}">News 03</li>
+    </ul>
+    <router-view></router-view>
+</template>
+
+<template id="detail01">
+   new derail 01
+</template>
+<template id="detail02">
+    new derail 02
+</template>
+<template id="detail03">
+    new derail 03
+</template>
+
+<template id="message">
+    <ul>
+        <li>Message 01</li>
+        <li>Message 02</li>
+        <li>Message 03</li>
+    </ul>
+</template>
+
+<script>
+Vue.use(VueRouter);
+
+var well = new Vue({
+    el: '.well',
+    data: {
+        msg: '',
+        color: 'red'
+    },
+    methods: {
+        setColor: function(){
+            this.color = '#' + parseInt(Math.random()*256).toString(16)
+                    + parseInt(Math.random()*256).toString(16)
+                    + parseInt(Math.random()*256).toString(16)
+        },
+        setColoredMessage: function(msg){
+            this.msg +=  '<p style="color: ' + this.color + '">' + msg + '</p>'
+        },
+        setTitle: function(title){
+            this.msg =  '<h2 style="color: #333">' + title + '</h2>'
+        }
+    }
+})
+
+
+function RouteHelper(name) {
+    var route = {
+        canReuse: function(transition) {
+            well.setColoredMessage('执行组件' + name + '的钩子函数:canReuse')
+            return true
+        },
+        canActivate: function(transition) {
+            well.setColoredMessage('执行组件' + name + '的钩子函数:canActivate')
+            transition.next()
+        },
+        activate: function(transition) {
+            well.setColoredMessage('执行组件' + name + '的钩子函数:activate')
+            transition.next()
+        },
+        canDeactivate: function(transition) {
+            well.setColoredMessage('执行组件' + name + '的钩子函数:canDeactivate')
+            transition.next()
+        },
+        deactivate: function(transition) {
+            well.setColoredMessage('执行组件' + name + '的钩子函数:deactivate')
+            transition.next()
+        },
+        data: function(transition) {
+            well.setColoredMessage('执行组件' + name + '的钩子函数:data')
+            transition.next()
+        }
+    }
+    return route;
+}
+
+var Home=Vue.extend({
+    template:'#home',
+    data: function() {
+        return {
+            currentPath: ''
+        }
+    },
+    route:  RouteHelper('Home'),
+});
+
+var About=Vue.extend({
+    template:'<div>my name is about</div>',
+    route: RouteHelper('About')
+});
+
+var News=Vue.extend({
+    template: '#news',
+    route: RouteHelper('News')
+});
+
+var Message=Vue.extend({
+    template: '#message',
+    route: RouteHelper('Message')
+});
+
+var Detail01=Vue.extend({
+    template:'#detail01',
+    route: RouteHelper('Detail01')
+});
+var Detail02=Vue.extend({
+    template:'#detail02',
+    route: RouteHelper('Detail02')
+});
+var Detail03=Vue.extend({
+    template:'#detail03',
+    route: RouteHelper('Detail03')
+});
+
+var router=new VueRouter();
+router.map({
+    '/home':{
+        component:Home,
+        subRoutes:{
+            '/news':{
+                component:News,
+                subRoutes:{
+
+                    '/detail01':{
+                        name:'detail',
+                        component:Detail01,
+                    },
+                    '/detail02':{
+                        component:Detail02,
+                    },
+                    '/detail03':{
+                        component:Detail03,
+                    },
+
+                },
+            },
+            '/message':{
+                component:Message
+            },
+        },
+    },
+    '/about':{component:About}
+});
+var App=Vue.extend({});
+//首次进入
+router.redirect({
+    '/': '/home'
+})
+router.redirect({
+    '/home': '/home/message'
+})
+router.start(App,'#app');
+
+router.beforeEach(function(transition) {
+    well.setColor()
+    well.setTitle('跳转路径<span class="text-danger">[from = ' + transition.from.path + '], [to = ' + transition.to.path + ']</span>')
+    well.setColoredMessage('执行router的全局函数:beforeEach')
+    transition.next()
+})
+
+router.afterEach(function(transition) {
+    well.setColoredMessage('执行router的全局函数:afterEach')
+})
+
+</script>
+</body>
+</html>

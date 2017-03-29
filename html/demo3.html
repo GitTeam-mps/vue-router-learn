@@ -1,0 +1,126 @@
+<!--
+@具名路由
+   <li v-link="{name:'detail',params:{id:'01'} }">News 01</li>
+    就是用名字来确定那个路由组件
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-router嵌套路由</title>
+    <script src="../common/vue-router.js"></script>
+    <script src="../common/vue.min.js"></script>
+</head>
+<body id="app">
+<ul>
+    <a v-link="{path:'/home'}">home</a>
+    <a v-link="{path:'/about'}">About</a>
+</ul>
+<router-view></router-view>
+
+<template id="home">
+    this is a home
+    <ul>
+        <li v-link="{path:'/home/news'}">news</li>
+        <li v-link="{path:'/home/message'}">message</li>
+    </ul>
+    <router-view></router-view>
+</template>
+
+<template id="news">
+    <ul>
+        <li v-link="{name:'detail',params:{id:'01'} }">News 01</li>
+        <li v-link="{path:'/home/news/detail02'}">News 02</li>
+        <li v-link="{path:'/home/news/detail03'}">News 03</li>
+    </ul>
+    <router-view></router-view>
+</template>
+
+<template id="detail01">
+   new derail 01
+</template>
+<template id="detail02">
+    new derail 02
+</template>
+<template id="detail03">
+    new derail 03
+</template>
+
+
+<template id="message">
+    <ul>
+        <li>Message 01</li>
+        <li>Message 02</li>
+        <li>Message 03</li>
+    </ul>
+</template>
+
+<script>
+Vue.use(VueRouter);
+
+var Home=Vue.extend({
+    template:'#home',
+});
+
+var About=Vue.extend({
+    template:'<div>my name is about</div>',
+});
+
+var News=Vue.extend({
+    template: '#news'
+});
+
+var Message=Vue.extend({
+    template: '#message'
+});
+
+var Detail01=Vue.extend({
+    template:'#detail01',
+});
+var Detail02=Vue.extend({
+    template:'#detail02',
+});
+var Detail03=Vue.extend({
+    template:'#detail03',
+});
+
+var router=new VueRouter();
+router.map({
+    '/home':{
+        component:Home,
+        subRoutes:{
+            '/news':{
+                component:News,
+                subRoutes:{
+                    '/detail01':{
+                        name:'detail',
+                        component:Detail01,
+                    },
+                    '/detail02':{
+                        component:Detail02,
+                    },
+                    '/detail03':{
+                        component:Detail03,
+                    },
+                },
+            },
+            '/message':{
+                component:Message
+            },
+        },
+    },
+    '/about':{component:About}
+});
+var App=Vue.extend({});
+//首次进入
+router.redirect({
+    '/': '/home'
+})
+router.redirect({
+    '/home': '/home/message'
+})
+router.start(App,'#app');
+
+</script>
+</body>
+</html>

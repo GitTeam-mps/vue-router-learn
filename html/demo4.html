@@ -1,0 +1,175 @@
+<!--
+  1. activeClass: 'active'
+   给选中的路由选项加样式
+   2.第2个问题，为v-link指令设定activeClass是不起作用的，因为我们使用的是bootstrap的样式，需要设置a标签的父元素<li>才能让链接看起来处于选中状态，就像下面的代码所展现的：
+
+      在data里面定义好   currentPath: ''
+      然后在选项中给他赋值
+      在路由的显示部分给它做判断
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-router   action</title>
+    <script src="../common/vue-router.js"></script>
+    <script src="../common/vue.min.js"></script>
+    <style>
+        .active{
+            background: red;
+        }
+        .active2{
+             background: blue;
+         }
+
+        .active3{
+            background: yellow;
+        }
+    </style>
+</head>
+<body id="app">
+<ul>
+
+         <a v-link="{path:'/home',activeClass: 'active'}">home</a>
+         <a v-link="{path:'/about',activeClass: 'active'}">About</a>
+</ul>
+<router-view></router-view>
+<div>
+    <p>当前路径：{{$route.path}}</p>
+    <p>-------------------------------------------------------------</p>
+    <p>当前参数：{{$route.params | json}}</p>
+    <p>-------------------------------------------------------------</p>
+    <p>路由名称：{{$route.name}}</p>
+    <p>-------------------------------------------------------------</p>
+    <p>路由查询参数：{{$route.query | json}}</p>
+    <p>-------------------------------------------------------------</p>
+    <p>路由匹配项：{{$route.matched | json}}</p>
+</div>
+
+<template id="home">
+    this is a home
+    <ul>
+        <li :class="currentPath == '/home/news' ? 'active2': ''">
+            <a v-link="{ path: '/home/news'}">news</a>
+        </li>
+        <li :class="currentPath == '/home/message' ? 'active2': ''">
+            <a v-link="{ path: '/home/message'}">message</a>
+        </li>
+<!--
+        <li v-link="{path:'/home/news' ,activeClass:'active2'}"></li>
+        <li v-link="{path:'/home/message',activeClass: 'active2'}"></li>
+-->
+    </ul>
+    <router-view></router-view>
+</template>
+
+<template id="news">
+    <ul>
+        <li v-link="{name:'detail',params:{id:'01'},activeClass: 'active3'}">News 01</li>
+        <li v-link="{path:'/home/news/detail02',activeClass: 'active3'}">News 02</li>
+        <li v-link="{path:'/home/news/detail03',activeClass: 'active3'}">News 03</li>
+    </ul>
+    <router-view></router-view>
+</template>
+
+<template id="detail01">
+   new derail 01
+</template>
+<template id="detail02">
+    new derail 02
+</template>
+<template id="detail03">
+    new derail 03
+</template>
+
+<template id="message">
+    <ul>
+        <li>Message 01</li>
+        <li>Message 02</li>
+        <li>Message 03</li>
+    </ul>
+</template>
+
+<script>
+Vue.use(VueRouter);
+
+var Home=Vue.extend({
+    template:'#home',
+    data: function() {
+        return {
+            currentPath: ''
+        }
+    },
+    route: {
+        data: function(transition){
+            transition.next({
+                currentPath: transition.to.path
+            })
+        }
+    }
+});
+
+var About=Vue.extend({
+    template:'<div>my name is about</div>',
+});
+
+var News=Vue.extend({
+    template: '#news'
+});
+
+var Message=Vue.extend({
+    template: '#message'
+});
+
+var Detail01=Vue.extend({
+    template:'#detail01',
+});
+var Detail02=Vue.extend({
+    template:'#detail02',
+});
+var Detail03=Vue.extend({
+    template:'#detail03',
+});
+
+var router=new VueRouter();
+router.map({
+    '/home':{
+        component:Home,
+        subRoutes:{
+            '/news':{
+                component:News,
+                subRoutes:{
+
+                    '/detail01':{
+                        name:'detail',
+                        component:Detail01,
+                    },
+                    '/detail02':{
+                        component:Detail02,
+                    },
+                    '/detail03':{
+                        component:Detail03,
+                    },
+
+                },
+            },
+            '/message':{
+                component:Message
+            },
+        },
+    },
+    '/about':{component:About}
+});
+var App=Vue.extend({});
+//首次进入
+router.redirect({
+    '/': '/home'
+})
+router.redirect({
+    '/home': '/home/message'
+})
+router.start(App,'#app');
+
+</script>
+</body>
+</html>
