@@ -2,17 +2,17 @@
 
 ## 目录
 
-* [demo1基本demo](##demo1基本demo)
+*  [demo1基本demo](##demo1基本demo)
 
-* [demo2 嵌套路由](##demo2 嵌套路由)
+*  [demo2 嵌套路由](##demo2嵌套路由)
 
-* [demo3 具名路由](## demo3 具名路由)
+*  [demo3 具名路由](##demo3具名路由)
 
-* [demo4 选中样式和父级选中样式的办法](##demo4 选中样式和父级选中样式的办法)
+*  [demo4 选中样式和父级选中样式的办法](##demo4选中样式和父级选中样式的办法)
+ 
+*  [demo5 路由的全局函数钩子和组件钩子以及每个钩子的对象](##demo5路由的全局函数钩子和组件钩子以及每个钩子的对象)
 
-* [demo5 路由的全局函数钩子和组件钩子以及每个钩子的对象](##demo5 路由的全局函数钩子和组件钩子以及每个钩子的对象)
-
-* [demo6 路由的全局函数钩子和组件钩子以及每个钩子的对象](##demo6 路由的全局函数钩子和组件钩子以及每个钩子的对象)
+*  [demo6 路由的全局函数钩子和组件钩子以及每个钩子的对象](##demo6路由的全局函数钩子和组件钩子以及每个钩子的对象)
 
 
 > ## demo1基本demo
@@ -55,7 +55,7 @@
 
 [demo1 链接](https://gitteam-mps.github.io/vue-router-learn/html/demo1.html "基础demo1")
 
-> ##  demo2 嵌套路由
+> ##  demo2嵌套路由
 -------------------
 
 ``` javascript
@@ -86,7 +86,7 @@
 [demo2 链接](https://gitteam-mps.github.io/vue-router-learn/html/demo2.html "嵌套路由demo2")
 
 
-> ## demo3 具名路由
+> ## demo3具名路由
 -------------------
 ```javascript
    @具名路由
@@ -130,7 +130,7 @@
 [demo3 链接](https://gitteam-mps.github.io/vue-router-learn/html/demo3.html "具名路由 demo3")
 
 
-> ## demo4 选中样式和父级选中样式的办法
+> ## demo4选中样式和父级选中样式的办法
 -------------------
 ```javascript
    一般的需要选中的时候给默认的class就可以
@@ -167,7 +167,7 @@
 [demo4 链接](https://gitteam-mps.github.io/vue-router-learn/html/demo4.html "选中样式处理 demo4")
 
 
-> ## demo5 路由的全局函数钩子和组件钩子以及每个钩子的对象
+> ## demo5路由的全局函数钩子和组件钩子以及每个钩子的对象
 -------------------
 路由的切换过程，本质上是执行一系列路由钩子函数，钩子函数总体上分为两大类：
     全局的钩子函数
@@ -243,7 +243,7 @@ var Home=Vue.extend({
 ```
 [demo5 链接](https://gitteam-mps.github.io/vue-router-learn/html/demo5.html "函数钩子 demo5")
 
-> ## demo6 路由的全局函数钩子和组件钩子以及每个钩子的对象
+> ## demo6路由的全局函数钩子和组件钩子以及每个钩子的对象
 -------------------
 
  切换控制流水线
