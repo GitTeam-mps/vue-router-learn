@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-router简单</title>
+    <script src="../common/vue-router.js"></script>
+    <script src="../common/vue.min.js"></script>
+</head>
+<body id="app">
+<ul>
+    <a v-link="{path:'/home'}">home</a>
+    <a v-link="{path:'/about'}">About</a>
+</ul>
+<router-view></router-view>
+
+<script>
+Vue.use(VueRouter);
+var Home=Vue.extend({
+    template:'<div>my name is hello</div>',
+});
+var About=Vue.extend({
+    template:'<div>my name is about</div>',
+});
+var router=new VueRouter();
+router.map({
+    '/home':{component:Home},
+    '/about':{component:About}
+});
+var App=Vue.extend({});
+//首次进入
+router.redirect({
+    '/': '/home'
+})
+router.start(App,'#app');
+</script>
+</body>
+</html>
