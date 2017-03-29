@@ -2,11 +2,21 @@
 
 ## 目录
 
-* [demo1基本demo](## demo1基本demo)
+* [demo1基本demo](##demo1基本demo)
 
+* [demo2 嵌套路由](##demo2 嵌套路由)
+
+* [demo3 具名路由](## demo3 具名路由)
+
+* [demo4 选中样式和父级选中样式的办法](##demo4 选中样式和父级选中样式的办法)
+
+* [demo5 路由的全局函数钩子和组件钩子以及每个钩子的对象](##demo5 路由的全局函数钩子和组件钩子以及每个钩子的对象)
+
+* [demo6 路由的全局函数钩子和组件钩子以及每个钩子的对象](##demo6 路由的全局函数钩子和组件钩子以及每个钩子的对象)
 
 
 > ## demo1基本demo
+-------------------
 
 ```javascript
    * 定义组件
@@ -46,6 +56,7 @@
 [demo1 链接](https://gitteam-mps.github.io/vue-router-learn/html/demo1.html "基础demo1")
 
 > ##  demo2 嵌套路由
+-------------------
 
 ``` javascript
 * @   Vue-router嵌套路由
@@ -76,7 +87,7 @@
 
 
 > ## demo3 具名路由
-
+-------------------
 ```javascript
    @具名路由
    <li v-link="{name:'detail',params:{id:'01'} }">News 01</li>
@@ -120,7 +131,7 @@
 
 
 > ## demo4 选中样式和父级选中样式的办法
-
+-------------------
 ```javascript
    一般的需要选中的时候给默认的class就可以
     <a v-link="{path:'/home',activeClass: 'active'}">home</a>
@@ -157,7 +168,7 @@
 
 
 > ## demo5 路由的全局函数钩子和组件钩子以及每个钩子的对象
-
+-------------------
 路由的切换过程，本质上是执行一系列路由钩子函数，钩子函数总体上分为两大类：
     全局的钩子函数
     组件的钩子函数
@@ -232,8 +243,8 @@ var Home=Vue.extend({
 ```
 [demo5 链接](https://gitteam-mps.github.io/vue-router-learn/html/demo5.html "函数钩子 demo5")
 
-> ## demo5 路由的全局函数钩子和组件钩子以及每个钩子的对象
-
+> ## demo6 路由的全局函数钩子和组件钩子以及每个钩子的对象
+-------------------
 
  切换控制流水线
     执行router的全局函数:beforeEach
